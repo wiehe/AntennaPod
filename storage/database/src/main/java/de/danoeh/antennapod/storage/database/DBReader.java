@@ -29,6 +29,7 @@ import de.danoeh.antennapod.storage.database.mapper.ChapterCursor;
 import de.danoeh.antennapod.storage.database.mapper.DownloadResultCursor;
 import de.danoeh.antennapod.storage.database.mapper.FeedCursor;
 import de.danoeh.antennapod.storage.database.mapper.FeedItemCursor;
+import de.danoeh.antennapod.storage.preferences.UserPreferences;
 
 /**
  * Provides methods for reading data from the AntennaPod database.
@@ -393,6 +394,17 @@ public final class DBReader {
                 FeedItem nextItem = list.get(0);
                 loadFeedDataOfFeedItemList(list);
                 return nextItem;
+            }
+            if (UserPreferences.isCircularQueue()) {
+                // We reached the end of the queue, try to jump to the beginning.
+                try (FeedItemCursor cursor_head = new FeedItemCursor(adapter.getQueueHead())) {
+                    list = extractItemlistFromCursor(cursor_head);
+                    if (!list.isEmpty()) {
+                        FeedItem nextItem = list.get(0);
+                        loadFeedDataOfFeedItemList(list);
+                        return nextItem;
+                    }
+                }
             }
             return null;
         } catch (Exception e) {

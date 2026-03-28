@@ -81,6 +81,7 @@ public abstract class UserPreferences {
     public static final String PREF_HARDWARE_FORWARD_BUTTON = "prefHardwareForwardButton";
     public static final String PREF_HARDWARE_PREVIOUS_BUTTON = "prefHardwarePreviousButton";
     public static final String PREF_FOLLOW_QUEUE = "prefFollowQueue";
+    public static final String PREF_CIRCULAR_QUEUE = "prefCircularQueue";
     public static final String PREF_SKIP_KEEPS_EPISODE = "prefSkipKeepsEpisode";
     public static final String PREF_FAVORITE_KEEPS_EPISODE = "prefFavoriteKeepsEpisode";
     public static final String PREF_AUTO_DELETE = "prefAutoDelete";
@@ -395,6 +396,10 @@ public abstract class UserPreferences {
 
     public static boolean isFollowQueue() {
         return prefs.getBoolean(PREF_FOLLOW_QUEUE, true);
+    }
+
+    public static boolean isCircularQueue() {
+        return prefs.getBoolean(PREF_CIRCULAR_QUEUE, false);
     }
 
     /**

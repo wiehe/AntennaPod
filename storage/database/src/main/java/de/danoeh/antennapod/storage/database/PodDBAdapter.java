@@ -362,6 +362,14 @@ public class PodDBAdapter {
             + " IN (SELECT " + KEY_ID + " FROM " + TABLE_NAME_FEEDS
             + " WHERE " + KEY_STATE + "=" + Feed.STATE_SUBSCRIBED + ")";
 
+    private static final String SELECT_QUEUE_ITEMS =
+            "SELECT " + KEYS_FEED_ITEM_WITHOUT_DESCRIPTION + ", " + KEYS_FEED_MEDIA
+            + " FROM " + TABLE_NAME_QUEUE
+            + " INNER JOIN " + TABLE_NAME_FEED_ITEMS
+            + " ON " + SELECT_KEY_ITEM_ID + " = " + TABLE_NAME_QUEUE + "." + KEY_FEEDITEM
+            +  JOIN_FEED_ITEM_AND_MEDIA
+            + " ORDER BY " + TABLE_NAME_QUEUE + "." + KEY_ID;
+
     private static Context context;
     private static PodDBAdapter instance;
 
@@ -1072,15 +1080,16 @@ public class PodDBAdapter {
     /**
      * Returns a cursor which contains all feed items in the queue. The returned
      * cursor uses the FEEDITEM_SEL_FI_SMALL selection.
-     * cursor uses the FEEDITEM_SEL_FI_SMALL selection.
      */
     public final Cursor getQueueCursor() {
-        final String query = "SELECT " + KEYS_FEED_ITEM_WITHOUT_DESCRIPTION + ", " + KEYS_FEED_MEDIA
-                + " FROM " + TABLE_NAME_QUEUE
-                + " INNER JOIN " + TABLE_NAME_FEED_ITEMS
-                + " ON " + SELECT_KEY_ITEM_ID + " = " + TABLE_NAME_QUEUE + "." + KEY_FEEDITEM
-                +  JOIN_FEED_ITEM_AND_MEDIA
-                + " ORDER BY " + TABLE_NAME_QUEUE + "." + KEY_ID;
+        return db.rawQuery(SELECT_QUEUE_ITEMS, null);
+    }
+
+    /**
+     * Returns a cursor which contains the first queue item.
+     */
+    public final Cursor getQueueHead() {
+        final String query = SELECT_QUEUE_ITEMS + " LIMIT 1";
         return db.rawQuery(query, null);
     }
 

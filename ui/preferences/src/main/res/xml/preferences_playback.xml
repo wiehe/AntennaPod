@@ -81,6 +81,13 @@
                 android:key="prefFollowQueue"
                 android:summary="@string/pref_followQueue_sum"
                 android:title="@string/pref_followQueue_title"/>
+        <SwitchPreferenceCompat
+                android:defaultValue="false"
+                android:enabled="true"
+                android:key="prefCircularQueue"
+                android:summary="@string/prefs_circular_queue_sum"
+                android:title="@string/prefs_circular_queue_title"
+                android:dependency="prefFollowQueue" />
         <de.danoeh.antennapod.ui.preferences.preference.MaterialListPreference
                 android:defaultValue="30"
                 android:entries="@array/smart_mark_as_played_values"
